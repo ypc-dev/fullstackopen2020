@@ -7,9 +7,16 @@ const HeadingDisplay = ({text}) => {
   )
 }
 
-const Statistics = ({text, value}) => {
+const Statistics = ({feedbacks}) => {
   return (
-    <p>{text}: {value}</p>
+    <div>
+      <p>good: {feedbacks.good}</p>
+      <p>neutral: {feedbacks.neutral}</p>
+      <p>bad: {feedbacks.bad}</p>
+      <p>all: {feedbacks.all()}</p>
+      <p>average: {feedbacks.average()}</p>
+      <p>positive: {feedbacks.positive()}</p>
+    </div>
   )
 }
 
@@ -21,7 +28,7 @@ const Button = ({onClick, text}) => {
 
 const App = () => {
   // save clicks of each button to own state
-  const [feedback, setFeedbacks] = useState({
+  const [feedbacks, setFeedbacks] = useState({
     good: 0,
     neutral: 0,
     bad: 0,
@@ -29,21 +36,22 @@ const App = () => {
       return (this.good + this.neutral + this.bad);
     },
     average() {
-      return (this.good * 1 + this.bad * -1) / this.all();
+      return ((this.good * 1 + this.bad * -1) / this.all()).toFixed(2);
     },
     positive() {
-      return (`${this.good / this.all()} %`);
+      const positivePercentage = ((this.good / this.all()) * 100).toFixed(2);
+      return (`${positivePercentage} %`);
     }
   });
 
   const handleGoodFeedback = () =>
-    setFeedbacks({...feedback, good: feedback.good + 1 });
+    setFeedbacks({...feedbacks, good: feedbacks.good + 1 });
 
   const handleNeutralFeedback = () => 
-    setFeedbacks({...feedback, neutral: feedback.neutral + 1 });
+    setFeedbacks({...feedbacks, neutral: feedbacks.neutral + 1 });
 
   const handleBadFeedback = () => 
-  setFeedbacks({...feedback, bad: feedback.bad + 1 });
+  setFeedbacks({...feedbacks, bad: feedbacks.bad + 1 });
 
   return (
     <div>
@@ -52,12 +60,7 @@ const App = () => {
       <Button onClick={handleNeutralFeedback} text="neutral" />
       <Button onClick={handleBadFeedback} text="bad" />
       <HeadingDisplay text="Statistics" />
-      <Statistics text="good" value={feedback.good} />
-      <Statistics text="neutral" value={feedback.neutral} />
-      <Statistics text="bad" value={feedback.bad} />
-      <Statistics text="all" value={feedback.all()} />
-      <Statistics text="average" value={feedback.average()} />
-      <Statistics text="positive" value={feedback.positive()} />
+      <Statistics feedbacks={feedbacks} />
     </div>
   )
 }
