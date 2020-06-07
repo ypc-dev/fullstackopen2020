@@ -25,6 +25,15 @@ const App = () => {
     good: 0,
     neutral: 0,
     bad: 0,
+    all() {
+      return (this.good + this.neutral + this.bad);
+    },
+    average() {
+      return (this.good * 1 + this.bad * -1) / this.all();
+    },
+    positive() {
+      return (`${this.good / this.all()} %`);
+    }
   });
 
   const handleGoodFeedback = () =>
@@ -46,6 +55,9 @@ const App = () => {
       <ContentDisplay text="good" value={feedback.good} />
       <ContentDisplay text="neutral" value={feedback.neutral} />
       <ContentDisplay text="bad" value={feedback.bad} />
+      <ContentDisplay text="all" value={feedback.all()} />
+      <ContentDisplay text="average" value={feedback.average()} />
+      <ContentDisplay text="positive" value={feedback.positive()} />
     </div>
   )
 }
