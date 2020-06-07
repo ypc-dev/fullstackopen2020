@@ -8,6 +8,10 @@ const HeadingDisplay = ({text}) => {
 }
 
 const Statistics = ({feedbacks}) => {
+  if(feedbacks.all() === 0) {
+    return <p>No feedback given</p>
+  }
+  
   return (
     <div>
       <p>good: {feedbacks.good}</p>
