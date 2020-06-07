@@ -7,7 +7,7 @@ const HeadingDisplay = ({text}) => {
   )
 }
 
-const ContentDisplay = ({text, value}) => {
+const Statistics = ({text, value}) => {
   return (
     <p>{text}: {value}</p>
   )
@@ -52,12 +52,12 @@ const App = () => {
       <Button onClick={handleNeutralFeedback} text="neutral" />
       <Button onClick={handleBadFeedback} text="bad" />
       <HeadingDisplay text="Statistics" />
-      <ContentDisplay text="good" value={feedback.good} />
-      <ContentDisplay text="neutral" value={feedback.neutral} />
-      <ContentDisplay text="bad" value={feedback.bad} />
-      <ContentDisplay text="all" value={feedback.all()} />
-      <ContentDisplay text="average" value={feedback.average()} />
-      <ContentDisplay text="positive" value={feedback.positive()} />
+      <Statistics text="good" value={feedback.good} />
+      <Statistics text="neutral" value={feedback.neutral} />
+      <Statistics text="bad" value={feedback.bad} />
+      <Statistics text="all" value={feedback.all()} />
+      <Statistics text="average" value={feedback.average()} />
+      <Statistics text="positive" value={feedback.positive()} />
     </div>
   )
 }
