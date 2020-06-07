@@ -14,19 +14,25 @@ const Statistics = ({feedbacks}) => {
   
   return (
     <div>
-      <Statistic text="good" value={feedbacks.good} />
-      <Statistic text="neutral" value={feedbacks.neutral} />
-      <Statistic text="bad" value={feedbacks.bad} />
-      <Statistic text="all" value={feedbacks.all()} />
-      <Statistic text="average" value={feedbacks.average()} />
-      <Statistic text="positive" value={feedbacks.positive()} />
+      <table>
+        <tbody>
+          <Statistic text="good" value={feedbacks.good} />
+          <Statistic text="neutral" value={feedbacks.neutral} />
+          <Statistic text="bad" value={feedbacks.bad} />
+          <Statistic text="all" value={feedbacks.all()} />
+          <Statistic text="average" value={feedbacks.average()} />
+          <Statistic text="positive" value={feedbacks.positive()} />
+        </tbody>
+      </table>
     </div>
   )
 }
 
 const Statistic = ({text, value}) => {
   return (
-    <p>{text}: {value}</p>
+    <tr>
+      <td>{text}: {value}</td>
+    </tr>
   )
 }
 
