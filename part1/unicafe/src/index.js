@@ -14,13 +14,19 @@ const Statistics = ({feedbacks}) => {
   
   return (
     <div>
-      <p>good: {feedbacks.good}</p>
-      <p>neutral: {feedbacks.neutral}</p>
-      <p>bad: {feedbacks.bad}</p>
-      <p>all: {feedbacks.all()}</p>
-      <p>average: {feedbacks.average()}</p>
-      <p>positive: {feedbacks.positive()}</p>
+      <Statistic text="good" value={feedbacks.good} />
+      <Statistic text="neutral" value={feedbacks.neutral} />
+      <Statistic text="bad" value={feedbacks.bad} />
+      <Statistic text="all" value={feedbacks.all()} />
+      <Statistic text="average" value={feedbacks.average()} />
+      <Statistic text="positive" value={feedbacks.positive()} />
     </div>
+  )
+}
+
+const Statistic = ({text, value}) => {
+  return (
+    <p>{text}: {value}</p>
   )
 }
 
@@ -55,7 +61,10 @@ const App = () => {
     setFeedbacks({...feedbacks, neutral: feedbacks.neutral + 1 });
 
   const handleBadFeedback = () => 
-  setFeedbacks({...feedbacks, bad: feedbacks.bad + 1 });
+    setFeedbacks({...feedbacks, bad: feedbacks.bad + 1 });
+
+  const handleReset = () => 
+    setFeedbacks({...feedbacks, good: 0, neutral: 0, bad: 0});
 
   return (
     <div>
@@ -63,6 +72,7 @@ const App = () => {
       <Button onClick={handleGoodFeedback} text="good" />
       <Button onClick={handleNeutralFeedback} text="neutral" />
       <Button onClick={handleBadFeedback} text="bad" />
+      <Button onClick={handleReset} text="reset" />
       <HeadingDisplay text="Statistics" />
       <Statistics feedbacks={feedbacks} />
     </div>
