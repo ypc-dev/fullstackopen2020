@@ -42,14 +42,20 @@ const App = (props) => {
   const [indexOfHighest, setIndexOfHighest] = useState(0);
 
   const displayRandomAnecdote = () => {
-    setSelected(Math.floor(Math.random() * props.anecdotes.length));  
+    let randomAnecdote = Math.floor(Math.random() * props.anecdotes.length);
+    while (randomAnecdote === selected) {
+      randomAnecdote = Math.floor(Math.random() * props.anecdotes.length);
+    }
+
+    setSelected(randomAnecdote);  
   }
 
   const updateVotes = () => {
     const updatedVotes = [...votes];
     updatedVotes[selected] = updatedVotes[selected] + 1;
-    setVotes(updatedVotes);
     const indexOfHighest = updatedVotes.indexOf(Math.max(...updatedVotes));
+
+    setVotes(updatedVotes);
     setIndexOfHighest(indexOfHighest);
   }
 
