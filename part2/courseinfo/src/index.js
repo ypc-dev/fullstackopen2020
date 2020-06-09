@@ -1,43 +1,70 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-const notes = [
-  {
-    id: 1,
-    content: 'HTML is easy',
-    date: '2019-05-30T17:30:31.098Z',
-    important: true
-  },
-  {
-    id: 2,
-    content: 'Browser can execute only Javascript',
-    date: '2019-05-30T18:39:34.091Z',
-    important: false
-  },
-  {
-    id: 3,
-    content: 'GET and POST are the most important methods of HTTP protocol',
-    date: '2019-05-30T19:20:14.298Z',
-    important: true
-  }
-]
+const Header = ({ text }) => {
+  return (
+    <h1>{text}</h1>
+  )
+}
 
-const App = (props) => {
-  const { notes } = props
+const Total = ({ course }) => {
+  const sum = course.parts[0].exercises + course.parts[1].exercises + course.parts[2].exercises
+  return(
+    <p>Number of exercises {sum}</p>
+  ) 
+}
 
+const Part = ({ name, exercises }) => {
+  return (
+    <li>{name} ({exercises} exercises)</li>    
+  )
+}
+
+const Content = ({ parts }) => {
   return (
     <div>
-      <h1>Notes</h1>
       <ul>
-        <li>{notes[0].content}</li>
-        <li>{notes[1].content}</li>
-        <li>{notes[2].content}</li>
+        {parts.map((part) => 
+          <Part key={part.id} name={part.name} exercises={part.exercises} />
+        )}
       </ul>
     </div>
   )
 }
 
-ReactDOM.render(
-  <App notes={notes} />,
-  document.getElementById('root')
-)
+const Course = ({course}) => {
+  return (
+    <div>
+      <Header text={course.name} />
+      <Content parts={course.parts} />
+    </div>
+  )
+}
+
+const App = () => {
+  const course = {
+    id: 1,
+    name: 'Half Stack application development',
+    parts: [
+      {
+        name: 'Fundamentals of React',
+        exercises: 10,
+        id: 1
+      },
+      {
+        name: 'Using props to pass data',
+        exercises: 7,
+        id: 2
+      },
+      {
+        name: 'State of a component',
+        exercises: 14,
+        id: 3
+      }
+    ]
+  }
+
+  return <Course course={course} />
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
