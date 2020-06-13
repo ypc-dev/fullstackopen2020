@@ -1,43 +1,39 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 const Countries = ({ countries }) => {
-  if (countries.length > 1 && countries.length < 11 ) {
-    return (
-      <ul>
-        {countries.map(country =>
-          <li key={country.name}>{country.name}</li>
-        )}
-      </ul>
-    )
-  }
-
-  if (countries.length === 1) {
-    return (
-      <div>
-        {countries.map(country =>
-          <Country key={country.name} country={country} />
-        )}
-      </div>
-    )
-  }
-
   return (
-    <p>Too many countries, specify another filter</p>
-  );
+    <div>
+      {countries.map(country =>
+        <Country key={country.name} country={country} />
+      )}
+    </div>
+  )
 }
 
 const Country = ({ country }) => {
+  const [showInfo, setShowInfo] = useState(false);
+
+  if (showInfo) {
+    return (
+      <div>
+        <p><strong><u>{country.name}</u></strong> <button onClick={() => setShowInfo(false)}>show</button></p>
+        <p>Capital: {country.capital}</p>
+        <p>Languages: </p>
+        <ul>
+          {country.languages.map(language =>
+            <li key={language.name}>{language.name}</li>
+          )}
+        </ul>
+        <img src={country.flag} alt={`Flag of ${country.name}`} />
+        <br />
+      </div>
+      
+    )
+  }
+
   return (
     <div>
-      <h2>{country.name}</h2>
-      <p>Capital: {country.capital}</p>
-      <h4>Languages</h4>
-      <ul>
-        {country.languages.map(language =>
-          <li key={language.name}>{language.name}</li>
-        )}
-      </ul>
-      <img src={country.flag} alt={`Flag of ${country.name}`} />
+      <p>{country.name} <button onClick={() => setShowInfo(true)}>show</button></p>
     </div>
   )
 }
