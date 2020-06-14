@@ -3,7 +3,6 @@ import Persons from './components/Persons';
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import personService from './services/persons';
-import axios from 'axios';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -23,14 +22,24 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault();
     if (persons.some(person => person.name === newName)) {
-      alert(`${newName} has already been added to the phonebook!`);
+      if (window.confirm(`${newName} has already been added to the phonebook, replace the old number with the new one?`)) {
+        const personToUpdate = persons.find(x => x.name === newName);
+        const updatedPerson = { ...personToUpdate, number: newNumber };
+
+        personService
+          .updatePerson(personToUpdate.id, updatedPerson)
+          .then(returnedPerson => {
+            setPersons(persons.map(person => person.id !== personToUpdate.id ? person : returnedPerson));
+          });
+      }
+
       setNewName('');
       setNewNumber('');
     } else {
       const personObject = {
         name: newName,
         number: newNumber,
-      }
+      };
 
       personService
         .createPerson(personObject)
