@@ -3,21 +3,22 @@ import Persons from './components/Persons';
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import personService from './services/persons';
+import axios from 'axios';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
-  const [ newName, setNewName ] = useState('');
-  const [ newNumber, setNewNumber ] = useState('');
-  const [ nameFilter, setNameFilter ] = useState('');
+  const [newName, setNewName] = useState('');
+  const [newNumber, setNewNumber] = useState('');
+  const [nameFilter, setNameFilter] = useState('');
   const filteredPersons = persons.filter(person => person.name.toLowerCase().includes(nameFilter));
 
   useEffect(() => {
     personService
-      .getAll()
+      .getPersons()
       .then(initialPersons => {
         setPersons(initialPersons);
       })
-  }, []);
+  });
 
   const addPerson = (event) => {
     event.preventDefault();
@@ -32,12 +33,24 @@ const App = () => {
       }
 
       personService
-        .create(personObject)
+        .createPerson(personObject)
         .then(returnedPerson => {
           setPersons(persons.concat(personObject));
           setNewName('');
           setNewNumber('');
         })
+    }
+  }
+
+  const deletePerson = (id) => {
+    const personToDelete = persons.find(person => person.id === id);
+
+    if (window.confirm(`Delete ${personToDelete.name}?`)) {
+      personService
+        .deletePerson(personToDelete.id)
+        .then(() => {
+          setPersons(persons.filter(person => person.id !== personToDelete.id));
+        });
     }
   }
 
@@ -65,7 +78,7 @@ const App = () => {
                   numberOnChange={handleNumberChange}
       />
       <h3>Numbers</h3>
-      <Persons persons={filteredPersons} />
+      <Persons persons={filteredPersons} onClick={deletePerson} />
     </div>
   )
 }
