@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios';
 
 const Countries = ({ countries }) => {
   return (
@@ -11,7 +12,17 @@ const Countries = ({ countries }) => {
 }
 
 const Country = ({ country }) => {
+  const weather_api_key = process.env.REACT_APP_WEATHER_API_KEY;
   const [showInfo, setShowInfo] = useState(false);
+  const [currentWeatherInfo, setCurrentWeatherInfo] = useState({});
+
+  useEffect(() => {
+    axios
+      .get(`https://api.openweathermap.org/data/2.5/weather?q=${country.capital}&appid=${weather_api_key}&units=metric`)
+      .then(response => {
+        setCurrentWeatherInfo(response.data);
+      });
+  }, []);
 
   if (showInfo) {
     return (
@@ -24,10 +35,12 @@ const Country = ({ country }) => {
             <li key={language.name}>{language.name}</li>
           )}
         </ul>
+        <p><strong>Weather in {country.capital}</strong></p>
+        <p>Temperature: {currentWeatherInfo.main.temp} Celsuis</p>
+        <p>Description: {currentWeatherInfo.weather[0].description} </p>
         <img src={country.flag} alt={`Flag of ${country.name}`} />
         <br />
       </div>
-      
     )
   }
 
