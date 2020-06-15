@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Persons from './components/Persons';
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
+import Notification from './components/Notification';
 import personService from './services/persons';
 
 const App = () => {
@@ -9,6 +10,7 @@ const App = () => {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [nameFilter, setNameFilter] = useState('');
+  const [notificationMessage, setNotificationMesage] = useState(null);
   const filteredPersons = persons.filter(person => person.name.toLowerCase().includes(nameFilter));
 
   useEffect(() => {
@@ -35,6 +37,10 @@ const App = () => {
 
       setNewName('');
       setNewNumber('');
+      setNotificationMesage(`${newName}'s old number has been replaced with the new number.`);
+      setTimeout(() => {
+        setNotificationMesage(null)
+      }, 3000)
     } else {
       const personObject = {
         name: newName,
@@ -47,6 +53,10 @@ const App = () => {
           setPersons(persons.concat(personObject));
           setNewName('');
           setNewNumber('');
+          setNotificationMesage(`${personObject.name} has been added.`);
+          setTimeout(() => {
+            setNotificationMesage(null)
+          }, 3000)
         })
     }
   }
@@ -78,6 +88,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notificationMessage} />
       <Filter value={nameFilter} onChange={handleNameFilterChange} />
       <h3>Add a new</h3>
       <PersonForm onSubmit={addPerson} 
