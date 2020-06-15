@@ -34,7 +34,7 @@
       "id": 6,
       "content": "a new note 3",
       "date": "Sun Jun 14 2020 17:48:49 GMT+0100 (Irish Standard Time)",
-      "important": false
+      "important": true
     },
     {
       "id": 7,
