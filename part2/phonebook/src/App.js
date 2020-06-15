@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Persons from './components/Persons';
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
-import Notification from './components/Notification';
+import { SuccessNotification, ErrorNotification } from './components/Notification';
 import personService from './services/persons';
 
 const App = () => {
@@ -11,6 +11,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('');
   const [nameFilter, setNameFilter] = useState('');
   const [notificationMessage, setNotificationMesage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
   const filteredPersons = persons.filter(person => person.name.toLowerCase().includes(nameFilter));
 
   useEffect(() => {
@@ -32,15 +33,26 @@ const App = () => {
           .updatePerson(personToUpdate.id, updatedPerson)
           .then(returnedPerson => {
             setPersons(persons.map(person => person.id !== personToUpdate.id ? person : returnedPerson));
+            setNewName('');
+            setNewNumber('');
+            setNotificationMesage(`${newName}'s old number has been replaced with the new number.`);
+            setTimeout(() => {
+              setNotificationMesage(null)
+            }, 3000);
+          })
+          .catch(error => {
+            setErrorMessage(
+              `Information of '${newName} has already been removed from the server.'`
+            );
+            setTimeout(() => {
+              setErrorMessage(null);
+            }, 3000)
+            setPersons(persons.filter(person => person.id !== updatedPerson.id));
           });
+          
       }
 
-      setNewName('');
-      setNewNumber('');
-      setNotificationMesage(`${newName}'s old number has been replaced with the new number.`);
-      setTimeout(() => {
-        setNotificationMesage(null)
-      }, 3000)
+      
     } else {
       const personObject = {
         name: newName,
@@ -56,7 +68,7 @@ const App = () => {
           setNotificationMesage(`${personObject.name} has been added.`);
           setTimeout(() => {
             setNotificationMesage(null)
-          }, 3000)
+          }, 3000);
         })
     }
   }
@@ -88,7 +100,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={notificationMessage} />
+      <SuccessNotification message={notificationMessage} />
+      <ErrorNotification message={errorMessage} />
       <Filter value={nameFilter} onChange={handleNameFilterChange} />
       <h3>Add a new</h3>
       <PersonForm onSubmit={addPerson} 
