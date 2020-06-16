@@ -30,6 +30,17 @@ app.get('/', (req, res) => {
   res.send('<h1>Hello World!</h1>');
 });
 
+app.get('/info', (req, res) => {
+  const personsLength = persons.length;
+  const date = new Date();
+  const display = `
+    <p>Phonebook has info for ${personsLength} people.</p>
+    <p>${date}</p>
+  `;
+
+  res.send(display);
+});
+
 app.get('/api/persons', (req, res) => {
   res.json(persons);
 });
