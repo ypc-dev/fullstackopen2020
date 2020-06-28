@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import Note from './components/Note';
 import noteService from './services/notes';
 
@@ -7,7 +6,7 @@ const App = () => {
   const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState('a new note');
   const [showAll, setShowAll] = useState(true);
-  const [errorMessage, setErrorMessage] = useState('Some error happened!');
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const notesToShow = showAll
     ? notes
@@ -16,8 +15,8 @@ const App = () => {
   useEffect(() => {
     noteService
       .getAll()
-        .then(initialNotes => {
-          setNotes(initialNotes);
+      .then(initialNotes => {
+        setNotes(initialNotes);
       });
   }, [])
 
@@ -32,9 +31,9 @@ const App = () => {
 
     noteService
       .create(noteObject)
-        .then(returnedNote => {
-          setNotes(notes.concat(returnedNote));
-          setNewNote('');
+      .then(returnedNote => {
+        setNotes(notes.concat(returnedNote));
+        setNewNote('');
       })
   }
 
@@ -71,8 +70,8 @@ const App = () => {
 
     noteService
       .update(id, changedNote)
-        .then(returnedNote => {
-          setNotes(notes.map(note => note.id !== id ? note : returnedNote));
+      .then(returnedNote => {
+        setNotes(notes.map(note => note.id !== id ? note : returnedNote));
       })
       .catch(error => {
         setErrorMessage(
@@ -92,7 +91,7 @@ const App = () => {
 
   return (
     <div>
-      <h1>Notes</h1>
+      <h1>Notess</h1>
       <Notification message={errorMessage} />
       <div>
         <button onClick={() => setShowAll(!showAll)}>
