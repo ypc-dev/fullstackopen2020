@@ -1,4 +1,6 @@
-require('dotenv').config();
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
@@ -105,21 +107,21 @@ app.post('/api/persons', (request, response) => {
     });
   }
 
-  if (persons.some(person => person.name === body.name)) {
-    return response.status(400).json({
-      error: 'name already exist in the phonebook'
-    });
-  }
+  // if (persons.some(person => person.name === body.name)) {
+  //   return response.status(400).json({
+  //     error: 'name already exist in the phonebook'
+  //   });
+  // }
 
-  const person = {
+  const person = new Person({
     name: body.name,
     number: body.number,
-    id: generateId(),
-  };
+    // id: generateId(),
+  });
 
-  persons = persons.concat(person);
-
-  response.json(person);
+  person.save().then(savedPerson => {
+    response.json(savedPerson);
+  });
 });
 
 const PORT = process.env.PORT;
